@@ -1,0 +1,31 @@
+---
+jenkins:
+  systemMessage: "config as code"
+tool:
+  git:
+    installations:
+      - name: "git"
+        home: "/usr/bin/git"
+  ansibleInstallation:
+    installations:
+      - name: "ansible"
+        home: "/usr/bin/ansible"
+
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - basicSSHUserPrivateKey:
+              scope: GLOBAL
+              id: github_ssh_key
+              username: git
+              description: "SSH key for Github"
+              privateKeySource:
+                directEntry:
+                  privateKey: "${readFile:/root/.jenkins/.ssh/key_pair_linux_main.pem}"
+          - file:
+              scope: GLOBAL
+              id: "play_key"
+              fileName: "mysecretfile.txt"
+              secretBytes: "${readFileBase64:/root/.jenkins/.ssh/mysecretfile.txt}" 

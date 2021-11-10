@@ -1,0 +1,4 @@
+---
+- name: Install OpenJDK
+  apt:
+    name: openjdk-11-jre-headless

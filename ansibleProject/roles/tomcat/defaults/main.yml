@@ -1,0 +1,30 @@
+---
+#URL for download tomcat
+url_tomcat: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
+#destenation tomcat
+dest_tomcat: /usr/local
+#source tar.gz file tomcat
+src_tar: /usr/local/apache-tomcat-9.0.54.tar.gz
+#destenation of start shell file
+startup: /usr/local/apache-tomcat-9.0.54/bin/startup.sh
+#upload over_hosts file
+over_hosts: /home/ec2-user/over_hosts/
+#dest over_hosts file (home dir)
+home_dir: /home/ubuntu/
+#ssh dir
+ssh_dir: /home/ubuntu/.ssh/
+#upload key dir
+ssh_key: /home/ec2-user/.ssh/key_pair_linux_main.pem
+#init.groovy dir
+init_groovy: /root/.jenkins/init.groovy.d/
+#seedjob source
+seedjob: /home/ec2-user/jenkinsfiles/seedjob.xml
+#jenkins yaml
+jenkins_yaml: /home/ec2-user/jenkinsfiles/jenkins.yaml
+#secur_groovy
+secur_groovy: /home/ec2-user/jenkinsfiles/disable-script-security.groovy
+#jenkins root dir:
+jenkins_root: /root/.jenkins/
+#jenkins_ssh_dir
+jenkins_ssh_dir: /root/.jenkins/.ssh/
+pass_cred: /home/ec2-user/.ssh/mysecretfile.txt

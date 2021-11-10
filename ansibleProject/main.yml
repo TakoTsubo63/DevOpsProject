@@ -1,0 +1,9 @@
+---
+- name: install tomcat server
+  hosts: tomcat_server
+  become: true
+ 
+  roles:
+     - openjdk
+     - tomcat
+     - jenkins

@@ -1,0 +1,40 @@
+---
+#URL for dowmload jenkins
+url_jenkins: http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+#destenation for download jenlins
+dest_jenkins: /usr/local/apache-tomcat-9.0.54/webapps/
+#local url for download jinkins-cli
+jenkins_cli: http://localhost:8080/jenkins/jnlpJars/jenkins-cli.jar
+#home directory
+home_dir: /home/ubuntu
+#shell shutdown tomcat
+shutdown: /usr/local/apache-tomcat-9.0.54/bin/shutdown.sh
+#shell startup tomcat
+startup: /usr/local/apache-tomcat-9.0.54/bin/startup.sh
+#URL jenkins
+UI_url: http://localhost:8080/jenkins/
+#credentials jenkins
+credentials: admin:`cat /root/.jenkins/secrets/initialAdminPassword`
+#destenation for seedjob
+seedjob: /home/ubuntu/seedjob.xml
+#jenkins root folder
+jenkins_root: /root/.jenkins/
+#install wizard file path
+wizard_file_path: /home/ec2-user/ansibleProject/roles/jenkins/files/jenkins.install.UpgradeWizard.state
+#basic-security file path
+basic_security_path: /home/ec2-user/ansibleProject/roles/jenkins/files/basic-security.groovy
+#ini_groovy_dir
+ini_groovy_dir: /root/.jenkins/init.groovy.d/
+#password_path
+password_path: /root/.jenkins/secrets/passwords
+#key_path
+key_path: /home/ec2-user/.ssh/key_pair_linux_main.pem
+#plugins_path
+plugins_path: /root/.jenkins/plugins
+#jobs_path
+jobs_path: /root/.jenkins/jobs
+#rm secret
+rm_secret: /root/.jenkins/.ssh/mysecretfile.txt
+#rm key path
+rm_key: /root/.jenkins/.ssh/key_pair_linux_main.pem
+#####

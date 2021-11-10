@@ -1,0 +1,81 @@
+---
+- name: download tomcat server packages
+  get_url:
+    url: "{{ url_tomcat }}"
+    dest: "{{ dest_tomcat }}"
+
+
+- name: extract tomcat packages
+  unarchive:
+    src: "{{ src_tar }}"
+    dest: "{{ dest_tomcat }}"
+    remote_src: yes
+
+
+- name: restart tomcat services
+  command: nohup "{{ startup }}" 
+
+- name: upload over_hosts
+  ansible.builtin.copy:
+    src: "{{ over_hosts }}"
+    dest: "{{ home_dir }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+
+- name: create directory for init.groovy
+  ansible.builtin.file:
+    path: "{{ init_groovy }}"
+    state: directory
+    mode: '0755'
+
+- name: upload seedjob
+  ansible.builtin.copy:
+    src: "{{ seedjob }}"
+    dest: "{{ home_dir }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: upload jenkins_yaml
+  ansible.builtin.copy:
+    src: "{{ jenkins_yaml }}"
+    dest: "{{ jenkins_root }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: upload secur_groovy
+  ansible.builtin.copy:
+    src: "{{ secur_groovy }}"
+    dest: "{{ init_groovy }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: create directory for init.groovy
+  ansible.builtin.file:
+    path: "{{ jenkins_ssh_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: upload key to jenkins
+  ansible.builtin.copy:
+    src: "{{ ssh_key }}"
+    dest: "{{ jenkins_ssh_dir }}"
+    owner: root
+    group: root
+    mode: '0600'
+
+
+- name: upload pass to jenkins
+  ansible.builtin.copy:
+    src: "{{ pass_cred }}"
+    dest: "{{ jenkins_ssh_dir }}"
+    owner: root
+    group: root
+    mode: '0600'
+
+
+

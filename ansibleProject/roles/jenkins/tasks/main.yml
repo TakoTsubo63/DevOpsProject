@@ -1,0 +1,107 @@
+---
+- name: download jenkins
+  get_url:
+     url: "{{ url_jenkins }}"
+     dest: "{{ dest_jenkins }}"
+
+- name: install pip
+  apt:
+    update_cache: true
+    name: python3-pip
+
+- name: install ansible
+  pip:
+    name: ansible
+    state: latest
+
+- name: install git
+  apt:
+     name: git
+     state: latest
+
+- name: install jenkins-cli
+  get_url:
+    url: "{{ jenkins_cli }}"
+    dest: "{{ home_dir }}"
+
+- name: upload install wizard file
+  ansible.builtin.copy:
+    src: "{{ wizard_file_path }}"
+    dest: "{{ jenkins_root }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: upload basic-security file
+  ansible.builtin.copy:
+    src: "{{ basic_security_path }}"
+    dest: "{{ ini_groovy_dir }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+#user add checking
+- name: find user
+  find:
+    paths: /root/.jenkins/users
+    patterns: "{{ user }}*"
+    file_type: directory
+    recurse: false
+  register: out
+  no_log: true
+
+- name: create user jenkins
+  shell: echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount ("{{ user }}", "{{ pass }}")' | java -jar jenkins-cli.jar -s "{{ UI_url }}" -auth "{{ credentials }}" groovy =
+  when: out.files | length == 0 
+  no_log: true
+
+#plugin install check
+
+- name: find Asnible plugin
+  find:
+    paths: "{{ plugins_path }}"
+    patterns: "ansible"
+    file_type: directory
+    recurse: false
+  register: out_ansible
+
+- name: install plugins
+  shell: |
+         java -jar jenkins-cli.jar -s "{{ UI_url }}" -auth "{{ user }}":"{{ pass }}" install-plugin Git Ansible job-DSL configuration-as-code configuration-as-code-groovy 
+         nohup "{{ shutdown }}"
+         nohup "{{ startup }}"
+  when: out_ansible.files | length == 0
+  no_log: true
+
+- name: Sleep for 50 seconds and continue with play
+  wait_for:
+    timeout: 50
+
+- name: find seedjob
+  find:
+    paths: "{{ jobs_path }}"
+    patterns: "seedjob*"
+    file_type: directory
+    recurse: false
+  register: out_seedjob
+
+- name: create seedjob
+  shell: java -jar jenkins-cli.jar -s "{{ UI_url }}" -auth "{{ user }}":"{{ pass }}" create-job seedjob < "{{ seedjob }}"
+  when: out_seedjob.files | length == 0
+  no_log: true
+
+- name: build seed job
+  shell: java -jar jenkins-cli.jar -s "{{ UI_url }}" -auth "{{ user }}":"{{ pass }}" build seedjob
+  no_log: true
+
+- name: Remove file 
+  ansible.builtin.file:
+    path: "{{ rm_key }}"
+    state: absent
+
+- name: Remove file
+  ansible.builtin.file:
+    path: "{{ rm_secret }}"
+    state: absent
+########
+
